@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,7 +20,7 @@ var tasks []Task
 func main() {
 	r := gin.Default()
 
-	// ✅ CORS Fix (Important)
+	// CORS
 	r.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "*")
@@ -36,7 +37,13 @@ func main() {
 	r.POST("/tasks", createTask)
 	r.GET("/tasks", getTasks)
 
-	r.Run(":8080")
+	// Render port fix
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	r.Run(":" + port)
 }
 
 func createTask(c *gin.Context) {
