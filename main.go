@@ -34,10 +34,15 @@ func main() {
 		c.Next()
 	})
 
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Backend Running",
+		})
+	})
+
 	r.POST("/tasks", createTask)
 	r.GET("/tasks", getTasks)
 
-	// Render port fix
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
